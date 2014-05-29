@@ -24,3 +24,15 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
+
+add_filter('pre_comment_approved', 'custom_blacklist', 10, 2 );
+
+function custom_blacklist( $approved, $commentdata ) {
+
+    extract($commentdata, EXTR_SKIP);
+    
+    if ( wp_blacklist_check($comment_author, $comment_author_email, $comment_author_url, $comment_content, $comment_author_IP, $comment_agent) )
+        $approved = 'trash';
+
+    return $approved;
+}
